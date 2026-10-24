@@ -1,6 +1,6 @@
 # Raycast Extension: aws-vault login
 
-This is an extension for [Raycast](https://www.raycast.com/) which opens the AWS management console via [aws-vault](https://github.com/99designs/aws-vault).
+This is an extension for [Raycast](https://www.raycast.com/) which opens the AWS management console via [aws-vault](https://github.com/ByteNess/aws-vault).
 
 This extension is transplanted from [kangaechu/aws-vault-alfred-workflow](https://github.com/kangaechu/aws-vault-alfred-workflow) which works with alfred.
 
@@ -39,4 +39,4 @@ Set the "MFA Prompt" preference to "aws-vault default" to use `AWS_VAULT_PROMPT`
 
 # Requirements
 
-* [aws-vault](https://github.com/99designs/aws-vault)
+* [aws-vault](https://github.com/ByteNess/aws-vault)
