@@ -3,6 +3,7 @@ import { homedir } from "os";
 import { join } from "path";
 import { promisify } from "util";
 import { showToast, Toast } from "@raycast/api";
+import { login } from "./awsVault";
 
 const execFileAsync = promisify(execFile);
 
@@ -64,16 +65,6 @@ export async function openConsole(profile: string, preferences: Preferences): Pr
     toast.title = `Error while opening ${preferences.browserName}`;
     toast.message = errorMessage(error);
   }
-}
-
-async function login(profile: string, { entrypoint, mfaPrompt }: Preferences): Promise<string> {
-  const promptArgs = mfaPrompt === "default" ? [] : [`--prompt=${mfaPrompt}`];
-  const { stdout, stderr } = await execFileAsync(entrypoint, ["login", profile, "--stdout", ...promptArgs]);
-  const url = stdout.trim();
-  if (url === "") {
-    throw new Error(stderr.trim() || "aws-vault login returned no URL");
-  }
-  return url;
 }
 
 async function openNewInstance(app: string, profileArgs: string[], url: string): Promise<void> {

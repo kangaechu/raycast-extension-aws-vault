@@ -1,19 +1,12 @@
 import { Action, ActionPanel, Detail, Icon, List, getPreferenceValues } from "@raycast/api";
-import { useExec } from "@raycast/utils";
+import { useCachedPromise } from "@raycast/utils";
+import { listProfiles } from "./awsVault";
 import { openConsole } from "./Browser";
 
 export default function Command() {
   const preferences = getPreferenceValues<Preferences.Index>();
 
-  const { isLoading, data, error, revalidate } = useExec(preferences.entrypoint, ["list", "--profiles"], {
-    parseOutput: ({ stdout, stderr, exitCode, error }) => {
-      if (error) throw error;
-      if (exitCode !== 0) throw new Error(stderr || `aws-vault exited with code ${exitCode}`);
-      return stdout
-        .split(/\n/)
-        .map((v) => v.trim())
-        .filter((v) => v !== "");
-    },
+  const { isLoading, data, error, revalidate } = useCachedPromise(listProfiles, [preferences], {
     failureToastOptions: { title: "Error while running aws-vault list" },
   });
 
