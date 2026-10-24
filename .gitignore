@@ -1,1 +1,4 @@
 node_modules
+
+# Raycast generated types
+raycast-env.d.ts

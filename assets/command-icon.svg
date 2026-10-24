@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#B0084D"/>
+      <stop offset="1" stop-color="#FF4F8B"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <!-- body -->
+    <rect x="104" y="104" width="304" height="276" rx="24"/>
+    <!-- feet -->
+    <line x1="152" y1="380" x2="152" y2="408"/>
+    <line x1="360" y1="380" x2="360" y2="408"/>
+    <!-- door -->
+    <rect x="140" y="140" width="232" height="204" rx="12"/>
+    <!-- dial -->
+    <circle cx="256" cy="242" r="52"/>
+    <circle cx="256" cy="242" r="6" fill="#FFFFFF"/>
+    <!-- handle -->
+    <line x1="340" y1="214" x2="340" y2="270"/>
+  </g>
+</svg>
