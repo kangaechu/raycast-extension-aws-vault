@@ -1,15 +1,25 @@
 import { execFileAsync, resolveExecutable, splitLines } from "./executable";
 
-export async function listProfiles({ entrypoint }: Preferences): Promise<string[]> {
+// Raycast does not load the shell environment, so pass the backend settings explicitly
+async function run(args: string[], { entrypoint, backend, keychain, filePassphrase }: Preferences) {
   const file = await resolveExecutable(entrypoint, "aws-vault");
-  const { stdout } = await execFileAsync(file, ["list", "--profiles"]);
+  const globalArgs = [
+    ...(backend === "default" ? [] : [`--backend=${backend}`]),
+    ...(keychain?.trim() ? [`--keychain=${keychain.trim()}`] : []),
+  ];
+  const env = filePassphrase ? { ...process.env, AWS_VAULT_FILE_PASSPHRASE: filePassphrase } : process.env;
+  return execFileAsync(file, [...globalArgs, ...args], { env });
+}
+
+export async function listProfiles(preferences: Preferences): Promise<string[]> {
+  const { stdout } = await run(["list", "--profiles"], preferences);
   return splitLines(stdout);
 }
 
-export async function login(profile: string, { entrypoint, mfaPrompt }: Preferences): Promise<string> {
-  const file = await resolveExecutable(entrypoint, "aws-vault");
+export async function login(profile: string, preferences: Preferences): Promise<string> {
+  const { mfaPrompt } = preferences;
   const promptArgs = mfaPrompt === "default" ? [] : [`--prompt=${mfaPrompt}`];
-  const { stdout, stderr } = await execFileAsync(file, ["login", profile, "--stdout", ...promptArgs]);
+  const { stdout, stderr } = await run(["login", profile, "--stdout", ...promptArgs], preferences);
   const url = stdout.trim();
   if (url === "") {
     throw new Error(stderr.trim() || "aws-vault login returned no URL");
@@ -18,8 +28,7 @@ export async function login(profile: string, { entrypoint, mfaPrompt }: Preferen
 }
 
 // Profiles whose credentials are stored in aws-vault
-export async function listCredentials({ entrypoint }: Preferences): Promise<string[]> {
-  const file = await resolveExecutable(entrypoint, "aws-vault");
-  const { stdout } = await execFileAsync(file, ["list", "--credentials"]);
+export async function listCredentials(preferences: Preferences): Promise<string[]> {
+  const { stdout } = await run(["list", "--credentials"], preferences);
   return splitLines(stdout);
 }
