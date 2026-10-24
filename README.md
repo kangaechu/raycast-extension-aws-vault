@@ -71,6 +71,22 @@ Raycast does not load your shell environment, so `AWS_VAULT_BACKEND`, `AWS_VAULT
 * "aws-vault File Passphrase" is passed as `AWS_VAULT_FILE_PASSPHRASE`. It is required with the "file" backend
   because aws-vault asks for the passphrase on the terminal otherwise.
 
+## Touch ID
+
+Enable "aws-vault Touch ID" to unlock the aws-vault keychain with Touch ID when it is locked (`--biometrics`).
+It requires aws-vault 7 ([ByteNess/aws-vault](https://github.com/ByteNess/aws-vault)) and the keychain backend.
+
+The first time Touch ID is used, aws-vault asks for the keychain password on the terminal and stores it in the login keychain.
+Raycast can't show that prompt, so run this once in a terminal beforehand:
+
+```shell
+security lock-keychain aws-vault.keychain
+aws-vault list --biometrics
+```
+
+How often Touch ID is requested follows the lock settings of the aws-vault keychain
+(see [the aws-vault documentation](https://github.com/ByteNess/aws-vault/blob/main/docs/content/docs/backends/index.md#touch-id)).
+
 # Session duration
 
 The extension does not pass `--duration` to `aws-vault login`, so the duration is decided by aws-vault.
