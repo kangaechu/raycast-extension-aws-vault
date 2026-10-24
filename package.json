@@ -123,6 +123,15 @@
       "description": "Passphrase of the \"file\" backend (AWS_VAULT_FILE_PASSPHRASE). Required with the \"file\" backend because aws-vault cannot prompt for it from Raycast.",
       "type": "password",
       "required": false
+    },
+    {
+      "title": "aws-vault Touch ID",
+      "label": "Use Touch ID to unlock the keychain",
+      "default": false,
+      "name": "biometrics",
+      "description": "Unlock the aws-vault keychain with Touch ID when it is locked (--biometrics). Requires aws-vault 7 (ByteNess) and the keychain backend. Run `aws-vault list --biometrics` in a terminal once beforehand.",
+      "type": "checkbox",
+      "required": false
     }
   ],
   "dependencies": {
