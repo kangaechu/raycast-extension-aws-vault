@@ -7,6 +7,9 @@ import { showToast, Toast } from "@raycast/api";
 
 const execFileAsync = promisify(execFile);
 
+// Colors supported by the "Open external links in a container" add-on
+const containerColors = ["blue", "turquoise", "green", "yellow", "orange", "red", "pink", "purple"];
+
 interface BrowserConfig {
   name: BrowserName;
   entrypoint: string;
@@ -17,7 +20,7 @@ export class Browser {
   readonly entrypoint: string;
   readonly mfaPrompt: MfaPrompt;
   readonly browser: string;
-  readonly profileArgsFunc: (profile: string) => string[];
+  readonly launchFunc: (profile: string, url: string) => Promise<void>;
 
   constructor(config: BrowserConfig) {
     this.browser = config.name;
@@ -26,20 +29,29 @@ export class Browser {
     const appSupport = join(homedir(), "Library", "Application Support");
     switch (config.name) {
       case "Google Chrome":
-        this.profileArgsFunc = (profile) => [
-          `--user-data-dir=${join(appSupport, "Google", "Chrome", "aws-vault", profile)}`,
-        ];
+        this.launchFunc = (profile, url) =>
+          this.openNewInstance([`--user-data-dir=${join(appSupport, "Google", "Chrome", "aws-vault", profile)}`], url);
         break;
       case "firefox":
-        this.profileArgsFunc = (profile) => [
-          "--profile",
-          join(appSupport, "Firefox", "Profiles", "aws-vault", profile),
-        ];
+        this.launchFunc = (profile, url) =>
+          this.openNewInstance(["--profile", join(appSupport, "Firefox", "Profiles", "aws-vault", profile)], url);
+        break;
+      case "Firefox Containers":
+        // Requires the "Open external links in a container" add-on
+        // https://addons.mozilla.org/firefox/addon/open-url-in-container/
+        this.launchFunc = (profile, url) =>
+          execFileAsync("open", [
+            "-a",
+            "Firefox",
+            `ext+container:name=${encodeURIComponent(profile)}&color=${containerColor(profile)}&url=${encodeURIComponent(url)}`,
+          ]).then(() => undefined);
         break;
       case "Brave Browser":
-        this.profileArgsFunc = (profile) => [
-          `--user-data-dir=${join(appSupport, "BraveSoftware", "Brave-Browser", "aws-vault", profile)}`,
-        ];
+        this.launchFunc = (profile, url) =>
+          this.openNewInstance(
+            [`--user-data-dir=${join(appSupport, "BraveSoftware", "Brave-Browser", "aws-vault", profile)}`],
+            url,
+          );
         break;
       default:
         throw Error(`unknown browser: ${config.name}`);
@@ -66,7 +78,7 @@ export class Browser {
     }
 
     try {
-      await execFileAsync("open", ["-na", this.browser, "--args", ...this.profileArgsFunc(profile), url]);
+      await this.launchFunc(profile, url);
       await toast.hide();
     } catch (error) {
       console.error(error);
@@ -75,4 +87,17 @@ export class Browser {
       toast.message = error instanceof Error ? error.message : String(error);
     }
   }
+
+  private async openNewInstance(profileArgs: string[], url: string): Promise<void> {
+    await execFileAsync("open", ["-na", this.browser, "--args", ...profileArgs, url]);
+  }
+}
+
+// Picks a stable container color from the profile name
+function containerColor(profile: string): string {
+  let hash = 0;
+  for (const c of profile) {
+    hash = (hash * 31 + c.charCodeAt(0)) >>> 0;
+  }
+  return containerColors[hash % containerColors.length];
 }

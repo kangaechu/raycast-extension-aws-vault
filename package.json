@@ -31,6 +31,10 @@
           "value": "firefox"
         },
         {
+          "title": "Firefox Containers",
+          "value": "Firefox Containers"
+        },
+        {
           "title": "Brave Browser",
           "value": "Brave Browser"
         }
