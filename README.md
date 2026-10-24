@@ -71,6 +71,23 @@ Raycast does not load your shell environment, so `AWS_VAULT_BACKEND`, `AWS_VAULT
 * "aws-vault File Passphrase" is passed as `AWS_VAULT_FILE_PASSPHRASE`. It is required with the "file" backend
   because aws-vault asks for the passphrase on the terminal otherwise.
 
+# Session duration
+
+The extension does not pass `--duration` to `aws-vault login`, so the duration is decided by aws-vault.
+To change it, set `duration_seconds` for each profile in `~/.aws/config`.
+
+```ini
+[profile admin]
+source_profile = me
+role_arn = arn:aws:iam::123456789012:role/Admin
+duration_seconds = 43200
+```
+
+* `duration_seconds` applies to profiles with `role_arn` (AssumeRole). The default is 1 hour.
+* It can't exceed the `MaxSessionDuration` of the role (1 to 12 hours), and role chaining is limited to 1 hour.
+* Profiles without `role_arn` (GetFederationToken) always use 1 hour, because `AWS_FEDERATION_TOKEN_TTL` set in the shell is not applied in Raycast.
+* With the AWS CLI, the duration of SSO profiles is decided by the permission set.
+
 # Requirements
 
 * [aws-vault](https://github.com/ByteNess/aws-vault) or [AWS CLI v2](https://aws.amazon.com/cli/)
