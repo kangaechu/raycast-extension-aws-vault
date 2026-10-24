@@ -32,7 +32,7 @@ export default function Command() {
           key={profile.name}
           icon="management-console.png"
           title={profile.name}
-          accessories={[{ tag: profile.tool === "aws-vault" ? "aws-vault" : "AWS CLI" }]}
+          accessories={profile.tool ? [{ tag: profile.tool === "aws-vault" ? "aws-vault" : "AWS CLI" }] : []}
           actions={
             <ActionPanel>
               <Action title="Open Browser" icon={Icon.Globe} onAction={() => openConsole(profile, preferences)} />

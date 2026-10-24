@@ -13,11 +13,6 @@ async function run(args: string[], { entrypoint, backend, keychain, filePassphra
   return execFileAsync(file, [...globalArgs, ...args], { env });
 }
 
-export async function listProfiles(preferences: Preferences): Promise<string[]> {
-  const { stdout } = await run(["list", "--profiles"], preferences);
-  return splitLines(stdout);
-}
-
 export async function login(profile: string, preferences: Preferences): Promise<string> {
   const { mfaPrompt } = preferences;
   const promptArgs = mfaPrompt === "default" ? [] : [`--prompt=${mfaPrompt}`];

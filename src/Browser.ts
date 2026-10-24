@@ -37,9 +37,7 @@ export async function openConsole(profile: Profile, preferences: Preferences): P
     url = await login(profile, preferences);
   } catch (error) {
     console.error(error);
-    toast.style = Toast.Style.Failure;
-    toast.title = "Error while logging in";
-    toast.message = errorMessage(error);
+    await showFailure("Error while logging in", error);
     return;
   }
 
@@ -52,10 +50,14 @@ export async function openConsole(profile: Profile, preferences: Preferences): P
     await toast.hide();
   } catch (error) {
     console.error(error);
-    toast.style = Toast.Style.Failure;
-    toast.title = `Error while opening ${preferences.browserName}`;
-    toast.message = errorMessage(error);
+    await showFailure(`Error while opening ${preferences.browserName}`, error);
   }
+}
+
+// Shows a new toast rather than updating the current one, so that it falls back to a HUD
+// when an unlock dialog has closed the Raycast window
+async function showFailure(title: string, error: unknown): Promise<void> {
+  await showToast({ style: Toast.Style.Failure, title, message: errorMessage(error) });
 }
 
 function chromiumProfileArg(profile: string): string {

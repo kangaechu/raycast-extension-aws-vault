@@ -49,6 +49,10 @@ Profiles from both aws-vault and the AWS CLI are listed, and the tool used for e
 * The other profiles (SSO, `credential_process`, etc.) are opened with the AWS CLI.
 * If only one of the tools is installed, all profiles are opened with it.
 
+Reading the aws-vault keychain may ask to unlock it (password or Touch ID), and the dialog closes the Raycast window.
+So profiles are listed from `~/.aws/config` and `aws configure list-profiles` without reading the keychain,
+and the tool is decided when a profile is opened. The tag shows the tool as of the last login, and is not shown until then.
+
 With the AWS CLI, the login URL is built from `aws configure export-credentials` and the
 [AWS federation endpoint](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html).
 
