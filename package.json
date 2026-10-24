@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "raycast-extension-aws-vault",
   "title": "AWS Vault",
-  "description": "Extension for Raycast which opens the AWS management console via aws-vault.",
+  "description": "Extension for Raycast which opens the AWS management console via aws-vault or AWS CLI.",
   "icon": "command-icon.png",
   "author": "sawadashota",
   "license": "MIT",
@@ -14,7 +14,7 @@
         "aws-vault",
         "aws"
       ],
-      "description": "Opens the AWS management console via aws-vault",
+      "description": "Opens the AWS management console via aws-vault or AWS CLI",
       "mode": "view"
     }
   ],
@@ -49,9 +49,17 @@
       "title": "aws-vault entrypoint",
       "default": "aws-vault",
       "name": "entrypoint",
-      "description": "Entrypoint of aws-vault command. If default doesn't work, please set path to aws-vault.",
+      "description": "Entrypoint of aws-vault command (used with aws-vault). If default doesn't work, please set path to aws-vault.",
       "type": "textfield",
-      "required": true
+      "required": false
+    },
+    {
+      "title": "AWS CLI entrypoint",
+      "default": "aws",
+      "name": "awsCliPath",
+      "description": "Entrypoint of aws command (used with AWS CLI). If default doesn't work, please set path to aws.",
+      "type": "textfield",
+      "required": false
     },
     {
       "title": "MFA Prompt",
@@ -67,7 +75,7 @@
       ],
       "default": "osascript",
       "name": "mfaPrompt",
-      "description": "How aws-vault asks for an MFA code. \"aws-vault default\" respects AWS_VAULT_PROMPT.",
+      "description": "How aws-vault asks for an MFA code (used with aws-vault). \"aws-vault default\" respects AWS_VAULT_PROMPT.",
       "type": "dropdown",
       "required": false
     }

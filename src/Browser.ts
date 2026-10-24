@@ -3,7 +3,7 @@ import { homedir } from "os";
 import { join } from "path";
 import { promisify } from "util";
 import { showToast, Toast } from "@raycast/api";
-import { login } from "./awsVault";
+import { login, Profile } from "./credentials";
 
 const execFileAsync = promisify(execFile);
 
@@ -38,8 +38,8 @@ const launchers: Record<BrowserName, Launcher> = {
     ),
 };
 
-export async function openConsole(profile: string, preferences: Preferences): Promise<void> {
-  const toast = await showToast({ style: Toast.Style.Animated, title: `Logging in to ${profile}` });
+export async function openConsole(profile: Profile, preferences: Preferences): Promise<void> {
+  const toast = await showToast({ style: Toast.Style.Animated, title: `Logging in to ${profile.name}` });
 
   let url: string;
   try {
@@ -47,7 +47,7 @@ export async function openConsole(profile: string, preferences: Preferences): Pr
   } catch (error) {
     console.error(error);
     toast.style = Toast.Style.Failure;
-    toast.title = "Error while running aws-vault login";
+    toast.title = "Error while logging in";
     toast.message = errorMessage(error);
     return;
   }
@@ -57,7 +57,7 @@ export async function openConsole(profile: string, preferences: Preferences): Pr
     if (!launch) {
       throw new Error(`unknown browser: ${preferences.browserName}`);
     }
-    await launch(profile, url);
+    await launch(profile.name, url);
     await toast.hide();
   } catch (error) {
     console.error(error);
