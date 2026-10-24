@@ -19,7 +19,18 @@ See more [official document](https://developers.raycast.com/basics/import-an-ext
 
 * Google Chrome (default)
 * Firefox
+* Firefox Containers
 * Brave Browser
+
+## Firefox Containers
+
+Opens each profile in a separate container tab of the same Firefox window.
+Install the [Open external links in a container](https://addons.mozilla.org/firefox/addon/open-url-in-container/) add-on.
+
+A container named after the profile is created on first use, with a color derived from the profile name.
+The color is only applied when the container is created; delete the container to recreate it.
+
+[Firefox Multi-Account Containers](https://addons.mozilla.org/firefox/addon/multi-account-containers/) is optional but handy for managing containers.
 
 # MFA
 
