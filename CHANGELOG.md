@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/kangaechu/raycast-extension-aws-vault/compare/v0.2.0...v0.3.0) (2026-10-24)
+
+
+### Features
+
+* use Title Case extension and command titles ([4a93888](https://github.com/kangaechu/raycast-extension-aws-vault/commit/4a9388816f3f0e54a9e8c863b5016b1a0bb4ff1b))
+
 ## [0.2.0](https://www.github.com/sawadashota/raycast-extension-aws-vault/compare/v0.1.0...v0.2.0) (2022-03-03)
 
 
