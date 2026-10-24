@@ -36,6 +36,21 @@ The color is only applied when the container is created; delete the container to
 
 [Firefox Multi-Account Containers](https://addons.mozilla.org/firefox/addon/multi-account-containers/) is optional but handy for managing containers.
 
+# aws-vault and AWS CLI
+
+Profiles from both aws-vault and the AWS CLI are listed, and the tool used for each profile is shown as a tag.
+
+* Profiles whose credentials are stored in aws-vault (`aws-vault list --credentials`), directly or via `source_profile`, are opened with aws-vault.
+* The other profiles (SSO, `credential_process`, etc.) are opened with the AWS CLI.
+* If only one of the tools is installed, all profiles are opened with it.
+
+With the AWS CLI, the login URL is built from `aws configure export-credentials` and the
+[AWS federation endpoint](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html).
+
+* The profile must provide temporary credentials (IAM Identity Center (SSO), `role_arn`, `credential_process`, etc.). Long-term IAM user access keys are not supported.
+* For SSO profiles, run `aws sso login` beforehand when the session has expired.
+* Profiles that ask for an MFA code on the terminal are not supported.
+
 # MFA
 
 If a profile requires MFA, a dialog asks for the MFA code (`aws-vault login --prompt=osascript`).
@@ -43,4 +58,4 @@ Set the "MFA Prompt" preference to "aws-vault default" to use `AWS_VAULT_PROMPT`
 
 # Requirements
 
-* [aws-vault](https://github.com/ByteNess/aws-vault)
+* [aws-vault](https://github.com/ByteNess/aws-vault) or [AWS CLI v2](https://aws.amazon.com/cli/)
