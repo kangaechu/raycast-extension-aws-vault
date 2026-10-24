@@ -16,26 +16,17 @@ const appSupport = join(homedir(), "Library", "Application Support");
 const containerColors = ["blue", "turquoise", "green", "yellow", "orange", "red", "pink", "purple"];
 
 const launchers: Record<BrowserName, Launcher> = {
-  "Google Chrome": (profile, url) =>
-    openNewInstance(
-      "Google Chrome",
-      [`--user-data-dir=${join(appSupport, "Google", "Chrome", "aws-vault", profile)}`],
-      url,
-    ),
+  // Chromium-based browsers open a window of the profile in the running browser (created on first use)
+  "Google Chrome": (profile, url) => openWithArgs("Google Chrome", [chromiumProfileArg(profile)], url),
   firefox: (profile, url) =>
-    openNewInstance("Firefox", ["--profile", join(appSupport, "Firefox", "Profiles", "aws-vault", profile)], url),
+    openWithArgs("Firefox", ["--profile", join(appSupport, "Firefox", "Profiles", "aws-vault", profile)], url),
   // Requires the "Open external links in a container" add-on
   // https://addons.mozilla.org/firefox/addon/open-url-in-container/
   "Firefox Containers": async (profile, url) => {
     const params = `name=${encodeURIComponent(profile)}&color=${containerColor(profile)}&url=${encodeURIComponent(url)}`;
     await execFileAsync("open", ["-a", "Firefox", `ext+container:${params}`]);
   },
-  "Brave Browser": (profile, url) =>
-    openNewInstance(
-      "Brave Browser",
-      [`--user-data-dir=${join(appSupport, "BraveSoftware", "Brave-Browser", "aws-vault", profile)}`],
-      url,
-    ),
+  "Brave Browser": (profile, url) => openWithArgs("Brave Browser", [chromiumProfileArg(profile)], url),
 };
 
 export async function openConsole(profile: Profile, preferences: Preferences): Promise<void> {
@@ -67,7 +58,11 @@ export async function openConsole(profile: Profile, preferences: Preferences): P
   }
 }
 
-async function openNewInstance(app: string, profileArgs: string[], url: string): Promise<void> {
+function chromiumProfileArg(profile: string): string {
+  return `--profile-directory=aws-${profile}`;
+}
+
+async function openWithArgs(app: string, profileArgs: string[], url: string): Promise<void> {
   await execFileAsync("open", ["-na", app, "--args", ...profileArgs, url]);
 }
 

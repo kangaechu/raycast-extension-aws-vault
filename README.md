@@ -22,7 +22,12 @@ See more [official document](https://developers.raycast.com/basics/import-an-ext
 * Firefox Containers
 * Brave Browser
 
-Except for Firefox Containers, the console login URL is passed to the browser as a command line argument,
+Google Chrome and Brave Browser open each profile as a browser profile (directory `aws-<profile>`) in the running browser.
+The browser profile is created on first use; rename it in the browser if you like.
+Profiles created by older versions under `~/Library/Application Support/Google/Chrome/aws-vault/` or
+`~/Library/Application Support/BraveSoftware/Brave-Browser/aws-vault/` are no longer used and can be deleted.
+
+With Firefox (not Firefox Containers), the console login URL is passed to the browser as a command line argument,
 so it is visible in the process list (e.g. `ps`) while the browser is running.
 The URL contains a sign-in token that is valid until it expires.
 
