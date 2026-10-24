@@ -22,6 +22,10 @@ See more [official document](https://developers.raycast.com/basics/import-an-ext
 * Firefox Containers
 * Brave Browser
 
+Except for Firefox Containers, the console login URL is passed to the browser as a command line argument,
+so it is visible in the process list (e.g. `ps`) while the browser is running.
+The URL contains a sign-in token that is valid until it expires.
+
 ## Firefox Containers
 
 Opens each profile in a separate container tab of the same Firefox window.

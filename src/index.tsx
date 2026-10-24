@@ -1,22 +1,11 @@
-import { Action, ActionPanel, List, Detail, getPreferenceValues } from "@raycast/api";
+import { Action, ActionPanel, Detail, Icon, List, getPreferenceValues } from "@raycast/api";
 import { useExec } from "@raycast/utils";
-import { BrowserName, MfaPrompt } from "./types";
-import { Browser } from "./Browser";
-
-interface Preferences {
-  browserName: BrowserName;
-  entrypoint: string;
-  mfaPrompt: MfaPrompt;
-}
+import { openConsole } from "./Browser";
 
 export default function Command() {
-  const preferences: Preferences = getPreferenceValues();
-  const browser = new Browser({
-    name: preferences.browserName,
-    ...preferences,
-  });
+  const preferences = getPreferenceValues<Preferences.Index>();
 
-  const { isLoading, data, error } = useExec(preferences.entrypoint, ["list", "--profiles"], {
+  const { isLoading, data, error, revalidate } = useExec(preferences.entrypoint, ["list", "--profiles"], {
     parseOutput: ({ stdout, stderr, exitCode, error }) => {
       if (error) throw error;
       if (exitCode !== 0) throw new Error(stderr || `aws-vault exited with code ${exitCode}`);
@@ -29,7 +18,17 @@ export default function Command() {
   });
 
   if (error) {
-    return <Detail markdown={error.message} />;
+    return (
+      <Detail
+        isLoading={isLoading}
+        markdown={`# Error while running aws-vault list\n\n\`\`\`\n${error.message}\n\`\`\``}
+        actions={
+          <ActionPanel>
+            <Action title="Retry" icon={Icon.ArrowClockwise} onAction={revalidate} />
+          </ActionPanel>
+        }
+      />
+    );
   }
 
   return (
@@ -42,7 +41,7 @@ export default function Command() {
           title={profile}
           actions={
             <ActionPanel>
-              <Action title="Open Browser" onAction={() => browser.open(profile)} />
+              <Action title="Open Browser" icon={Icon.Globe} onAction={() => openConsole(profile, preferences)} />
             </ActionPanel>
           }
         />
