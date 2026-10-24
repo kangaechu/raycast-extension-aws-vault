@@ -4,13 +4,17 @@ on:
       - main
 
 name: release-please
+
+permissions: {}
+
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v2
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
-          release-type: node
-          default-branch: main
-          bump-minor-pre-major: yes
           token: ${{ secrets.GITHUB_TOKEN }}
