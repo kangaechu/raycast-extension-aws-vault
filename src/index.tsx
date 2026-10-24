@@ -1,4 +1,4 @@
-import { ActionPanel, Icon, List, Detail, getPreferenceValues } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, Detail, getPreferenceValues } from "@raycast/api";
 import React, { useEffect, useState } from "react";
 import { exec } from "child_process";
 import { BrowserName } from "./types";
@@ -63,7 +63,7 @@ export default function Command() {
         title={profile}
         actions={
           <ActionPanel>
-            <ActionPanel.Item title="Open Browser" onAction={onClick(profile)} />
+            <Action title="Open Browser" onAction={onClick(profile)} />
           </ActionPanel>
         }
       />

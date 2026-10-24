@@ -1,6 +1,6 @@
 import { BrowserName } from "./types";
 import { exec } from "child_process";
-import { showToast, ToastStyle } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 
 interface BrowserConfig {
   name: BrowserName;
@@ -36,7 +36,11 @@ export class Browser {
   public open(profile: string): void {
     exec(`${this.entrypoint} login ${profile} --stdout`, (error, stdout, stderr) => {
       if (error) {
-        showToast(ToastStyle.Failure, "Error while running aws-vault login", error.message);
+        showToast({
+          style: Toast.Style.Failure,
+          title: "Error while running aws-vault login",
+          message: error.message,
+        });
         console.error(`error: ${error.message}`);
         return;
       }
