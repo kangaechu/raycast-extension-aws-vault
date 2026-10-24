@@ -1,6 +1,5 @@
-import { Action, ActionPanel, Icon, List, Detail, getPreferenceValues } from "@raycast/api";
-import React, { useEffect, useState } from "react";
-import { exec } from "child_process";
+import { Action, ActionPanel, List, Detail, getPreferenceValues } from "@raycast/api";
+import { useExec } from "@raycast/utils";
 import { BrowserName } from "./types";
 import { Browser } from "./Browser";
 
@@ -16,59 +15,37 @@ export default function Command() {
     ...preferences,
   });
 
-  const [profiles, setProfiles] = useState<string[]>([]);
-  const [errorMsg, setErrorMsg] = useState<string>("");
-  useEffect(() => {
-    exec(`${preferences.entrypoint} list`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`error: ${error.message}`);
-        setErrorMsg(error.message);
-        return;
-      }
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
-        setErrorMsg(stderr);
-        return;
-      }
-      const lines: string[] = stdout.split(/\n/);
-      setProfiles(
-        lines
-          .slice(2)
-          .map((v) => v.split(" ")[0])
-          .filter((v) => v.match(/^[a-zA-Z0-9]/)),
-      );
-    });
-  }, []);
-
-  if (errorMsg !== "") {
-    return <Detail markdown={errorMsg} />;
-  }
-
-  const onClick = (profile: string) => (): void => browser.open(profile);
-
-  if (profiles.length === 0) {
-    return (
-      <List>
-        <List.Item icon={Icon.Clock} title="Loading...." />
-      </List>
-    );
-  }
-
-  const list: React.ReactElement[] = [];
-  profiles.forEach((profile, index) => {
-    list.push(
-      <List.Item
-        key={index}
-        icon="management-console.png"
-        title={profile}
-        actions={
-          <ActionPanel>
-            <Action title="Open Browser" onAction={onClick(profile)} />
-          </ActionPanel>
-        }
-      />,
-    );
+  const { isLoading, data, error } = useExec(preferences.entrypoint, ["list", "--profiles"], {
+    parseOutput: ({ stdout, stderr, exitCode, error }) => {
+      if (error) throw error;
+      if (exitCode !== 0) throw new Error(stderr || `aws-vault exited with code ${exitCode}`);
+      return stdout
+        .split(/\n/)
+        .map((v) => v.trim())
+        .filter((v) => v !== "");
+    },
+    failureToastOptions: { title: "Error while running aws-vault list" },
   });
 
-  return <List>{list}</List>;
+  if (error) {
+    return <Detail markdown={error.message} />;
+  }
+
+  return (
+    <List isLoading={isLoading}>
+      <List.EmptyView title="No profiles found" description="Configure profiles in ~/.aws/config" />
+      {data?.map((profile) => (
+        <List.Item
+          key={profile}
+          icon="management-console.png"
+          title={profile}
+          actions={
+            <ActionPanel>
+              <Action title="Open Browser" onAction={() => browser.open(profile)} />
+            </ActionPanel>
+          }
+        />
+      ))}
+    </List>
+  );
 }
