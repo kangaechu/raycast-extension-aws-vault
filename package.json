@@ -78,6 +78,51 @@
       "description": "How aws-vault asks for an MFA code (used with aws-vault). \"aws-vault default\" respects AWS_VAULT_PROMPT.",
       "type": "dropdown",
       "required": false
+    },
+    {
+      "title": "aws-vault Backend",
+      "data": [
+        {
+          "title": "aws-vault default",
+          "value": "default"
+        },
+        {
+          "title": "macOS Keychain",
+          "value": "keychain"
+        },
+        {
+          "title": "Encrypted file",
+          "value": "file"
+        },
+        {
+          "title": "pass",
+          "value": "pass"
+        },
+        {
+          "title": "passage",
+          "value": "passage"
+        }
+      ],
+      "default": "default",
+      "name": "backend",
+      "description": "Secret backend of aws-vault (--backend). Raycast does not load AWS_VAULT_BACKEND from your shell, so set it here when you don't use the keychain.",
+      "type": "dropdown",
+      "required": false
+    },
+    {
+      "title": "aws-vault Keychain",
+      "default": "",
+      "name": "keychain",
+      "description": "Name of the macOS keychain used by aws-vault (--keychain). Leave empty for the default.",
+      "type": "textfield",
+      "required": false
+    },
+    {
+      "title": "aws-vault File Passphrase",
+      "name": "filePassphrase",
+      "description": "Passphrase of the \"file\" backend (AWS_VAULT_FILE_PASSPHRASE). Required with the \"file\" backend because aws-vault cannot prompt for it from Raycast.",
+      "type": "password",
+      "required": false
     }
   ],
   "dependencies": {

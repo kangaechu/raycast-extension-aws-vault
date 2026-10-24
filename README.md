@@ -61,6 +61,16 @@ With the AWS CLI, the login URL is built from `aws configure export-credentials`
 If a profile requires MFA, a dialog asks for the MFA code (`aws-vault login --prompt=osascript`).
 Set the "MFA Prompt" preference to "aws-vault default" to use `AWS_VAULT_PROMPT` or aws-vault's default prompt instead.
 
+# aws-vault backend
+
+Raycast does not load your shell environment, so `AWS_VAULT_BACKEND`, `AWS_VAULT_KEYCHAIN_NAME` and
+`AWS_VAULT_FILE_PASSPHRASE` set in e.g. `.zshrc` are not applied. Set them in the extension preferences instead.
+
+* "aws-vault Backend" is passed as `--backend` (keychain, file, pass, passage). "aws-vault default" passes nothing.
+* "aws-vault Keychain" is passed as `--keychain` when set.
+* "aws-vault File Passphrase" is passed as `AWS_VAULT_FILE_PASSPHRASE`. It is required with the "file" backend
+  because aws-vault asks for the passphrase on the terminal otherwise.
+
 # Requirements
 
 * [aws-vault](https://github.com/ByteNess/aws-vault) or [AWS CLI v2](https://aws.amazon.com/cli/)
