@@ -21,6 +21,11 @@ See more [official document](https://developers.raycast.com/basics/import-an-ext
 * Firefox
 * Brave Browser
 
+# MFA
+
+If a profile requires MFA, a dialog asks for the MFA code (`aws-vault login --prompt=osascript`).
+Set the "MFA Prompt" preference to "aws-vault default" to use `AWS_VAULT_PROMPT` or aws-vault's default prompt instead.
+
 # Requirements
 
 * [aws-vault](https://github.com/99designs/aws-vault)

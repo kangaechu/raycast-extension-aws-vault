@@ -1,11 +1,12 @@
 import { Action, ActionPanel, List, Detail, getPreferenceValues } from "@raycast/api";
 import { useExec } from "@raycast/utils";
-import { BrowserName } from "./types";
+import { BrowserName, MfaPrompt } from "./types";
 import { Browser } from "./Browser";
 
 interface Preferences {
   browserName: BrowserName;
   entrypoint: string;
+  mfaPrompt: MfaPrompt;
 }
 
 export default function Command() {
