@@ -48,6 +48,24 @@
       "description": "Entrypoint of aws-vault command. If default doesn't work, please set path to aws-vault.",
       "type": "textfield",
       "required": true
+    },
+    {
+      "title": "MFA Prompt",
+      "data": [
+        {
+          "title": "Dialog (osascript)",
+          "value": "osascript"
+        },
+        {
+          "title": "aws-vault default",
+          "value": "default"
+        }
+      ],
+      "default": "osascript",
+      "name": "mfaPrompt",
+      "description": "How aws-vault asks for an MFA code. \"aws-vault default\" respects AWS_VAULT_PROMPT.",
+      "type": "dropdown",
+      "required": false
     }
   ],
   "dependencies": {

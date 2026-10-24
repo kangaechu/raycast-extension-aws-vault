@@ -1,4 +1,4 @@
-import { BrowserName } from "./types";
+import { BrowserName, MfaPrompt } from "./types";
 import { execFile } from "child_process";
 import { homedir } from "os";
 import { join } from "path";
@@ -10,16 +10,19 @@ const execFileAsync = promisify(execFile);
 interface BrowserConfig {
   name: BrowserName;
   entrypoint: string;
+  mfaPrompt: MfaPrompt;
 }
 
 export class Browser {
   readonly entrypoint: string;
+  readonly mfaPrompt: MfaPrompt;
   readonly browser: string;
   readonly profileArgsFunc: (profile: string) => string[];
 
   constructor(config: BrowserConfig) {
     this.browser = config.name;
     this.entrypoint = config.entrypoint;
+    this.mfaPrompt = config.mfaPrompt;
     const appSupport = join(homedir(), "Library", "Application Support");
     switch (config.name) {
       case "Google Chrome":
@@ -48,7 +51,8 @@ export class Browser {
 
     let url: string;
     try {
-      const { stdout, stderr } = await execFileAsync(this.entrypoint, ["login", profile, "--stdout"]);
+      const promptArgs = this.mfaPrompt === "default" ? [] : [`--prompt=${this.mfaPrompt}`];
+      const { stdout, stderr } = await execFileAsync(this.entrypoint, ["login", profile, "--stdout", ...promptArgs]);
       url = stdout.trim();
       if (url === "") {
         throw new Error(stderr.trim() || "aws-vault login returned no URL");
