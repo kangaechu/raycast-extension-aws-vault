@@ -35,7 +35,7 @@ export default function Command() {
         lines
           .slice(2)
           .map((v) => v.split(" ")[0])
-          .filter((v) => v.match(/^[a-zA-Z0-9]/))
+          .filter((v) => v.match(/^[a-zA-Z0-9]/)),
       );
     });
   }, []);
@@ -66,7 +66,7 @@ export default function Command() {
             <Action title="Open Browser" onAction={onClick(profile)} />
           </ActionPanel>
         }
-      />
+      />,
     );
   });
 
