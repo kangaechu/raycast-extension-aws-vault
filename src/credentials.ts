@@ -12,17 +12,21 @@ export interface Profile {
   tool?: Tool;
 }
 
-const tools = { "aws-vault": awsVault, "aws-cli": awsCli };
-
 // Profiles whose credentials are stored in aws-vault, as of the last login
 const cache = new Cache();
 const credentialsKey = "aws-vault-credentials";
 
 // Reading the keychain may ask to unlock it, and the dialog closes the Raycast window.
 // So the tool is decided on login, not when listing profiles.
-export async function login(profile: Profile, preferences: Preferences): Promise<string> {
+export async function login(
+  profile: Profile,
+  preferences: Preferences,
+  onSignIn?: (loginProfile: string) => void,
+): Promise<string> {
   const tool = await resolveTool(profile.name, preferences);
-  return tools[tool].login(profile.name, preferences);
+  return tool === "aws-cli"
+    ? awsCli.login(profile.name, preferences, onSignIn)
+    : awsVault.login(profile.name, preferences);
 }
 
 // Lists profiles without reading the keychain
