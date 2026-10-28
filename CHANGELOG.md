@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.5.0](https://github.com/kangaechu/raycast-extension-aws-vault/compare/v0.4.0...v0.5.0) (2026-10-28)
+
+
+### Features
+
+* configure aws-vault backend, keychain and file passphrase in preferences ([804e532](https://github.com/kangaechu/raycast-extension-aws-vault/commit/804e5328638b970e4184818603cc525a18734f8d))
+* configure aws-vault backend, keychain and file passphrase in preferences ([a593cf8](https://github.com/kangaechu/raycast-extension-aws-vault/commit/a593cf8cb4dbf795c387c9626b1419653cb86c07))
+* sign in with aws login when the source profile has no session ([e2e3afd](https://github.com/kangaechu/raycast-extension-aws-vault/commit/e2e3afd60ac45f3a4b7576947645c4f5e1bdab24))
+* sign in with aws login when the source profile has no session ([bc1cc10](https://github.com/kangaechu/raycast-extension-aws-vault/commit/bc1cc102cf681ec4c2a2a65a0cabcfdfda48379e))
+* unlock the aws-vault keychain with Touch ID ([d14f7c5](https://github.com/kangaechu/raycast-extension-aws-vault/commit/d14f7c58750850caeb7139af74c6170a30597254))
+* unlock the aws-vault keychain with Touch ID ([22a228a](https://github.com/kangaechu/raycast-extension-aws-vault/commit/22a228a2a777aa882a6d913c09a556a79e75291f))
+
+
+### Bug Fixes
+
+* don't read the aws-vault keychain when listing profiles ([59046c3](https://github.com/kangaechu/raycast-extension-aws-vault/commit/59046c3e976175898e3d571cd620b2f617e81aca))
+* don't read the aws-vault keychain when listing profiles ([eed5486](https://github.com/kangaechu/raycast-extension-aws-vault/commit/eed5486dc94badf0919e000e5c26300e7a5c7c30))
+
 ## [0.4.0](https://github.com/kangaechu/raycast-extension-aws-vault/compare/v0.3.0...v0.4.0) (2026-10-24)
 
 
