@@ -58,6 +58,8 @@ With the AWS CLI, the login URL is built from `aws configure export-credentials`
 
 * The profile must provide temporary credentials (IAM Identity Center (SSO), `role_arn`, `credential_process`, etc.). Long-term IAM user access keys are not supported.
 * For SSO profiles, run `aws sso login` beforehand when the session has expired.
+* If the profile, or its `source_profile`, is signed in with `aws login` and the session is missing or expired, the extension runs `aws login --profile <profile>`.
+  The sign-in page opens in the default browser. Raycast's window closes then, so select the profile again after signing in.
 * Profiles that ask for an MFA code on the terminal are not supported.
 
 # MFA

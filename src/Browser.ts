@@ -34,7 +34,11 @@ export async function openConsole(profile: Profile, preferences: Preferences): P
 
   let url: string;
   try {
-    url = await login(profile, preferences);
+    url = await login(profile, preferences, (loginProfile) => {
+      // The browser takes the focus and closes the Raycast window, so say what to do afterwards
+      toast.title = `Sign in to ${loginProfile} in the browser`;
+      toast.message = `Then select ${profile.name} again`;
+    });
   } catch (error) {
     console.error(error);
     await showFailure("Error while logging in", error);
